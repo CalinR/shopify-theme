@@ -11,6 +11,9 @@
   "author": "Calin Reimer",
   "license": "ISC",
   "dependencies": {
-    "commander": "^2.11.0"
+    "commander": "^2.11.0",
+    "pad": "^1.1.0",
+    "prompt-sync": "^4.1.5",
+    "shopify-api-node": "^2.8.0"
   }
 }

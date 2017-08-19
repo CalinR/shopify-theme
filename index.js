@@ -1,21 +1,32 @@
 #! /usr/bin/env node
 const program = require('commander');
-const pjson = require('./package.json');
+const packageJson = require('./package.json');
 const helptext = require('./helptext.js');
 const configuration = require('./configuration.js');
+const download = require('./download.js');
+const watch = require('./watch.js');
 
 program.helpInformation = helptext; // Overrides help text
 
-program.version(pjson.version)
+program.version(packageJson.version)
+    .usage('[command]')
     .description('Shopify Theme is a tool for manipulating Shopify themes.');
 
 program.command('configure')
     .description('Creates configuration file')
-    .action(configuration);
+    .action(() => configuration());
+
+program.command('download')
+    .description('Downloads theme files')
+    .action(() => download());
 
 program.command('version')
-    .description('Returns version')
-    .action(() => console.log(pjson.version));
+    .description('Print the version number of Shopify Theme')
+    .action(() => console.log(packageJson.version));
+
+program.command('watch')
+    .description('Watch directory for changes and update remote theme')
+    .action(() => watch());
 
 program.parse(process.argv);
 
