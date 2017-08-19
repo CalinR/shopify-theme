@@ -1,0 +1,16 @@
+{
+  "name": "shopify-theme",
+  "version": "0.0.1",
+  "description": "",
+  "bin": {
+    "shopify-theme": "index.js"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Calin Reimer",
+  "license": "ISC",
+  "dependencies": {
+    "commander": "^2.11.0"
+  }
+}
