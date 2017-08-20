@@ -6,7 +6,9 @@ const Shopify = require('shopify-api-node');
 const prompt = require('prompt-sync')();
 const configuration = require('./configuration.js');
 let themeList = [];
+let themeId;
 let shopify;
+let themeSize = 0;
 
 
 /* ==================================================
@@ -22,7 +24,9 @@ function download(){
         autoLimit: true
     });
 
-    getTheme().then((theme) => downloadTheme(theme))
+    getTheme()
+        .then(fetchAssets)
+        .then(downloadAssets)
 }
 
 /* ==================================================
@@ -36,6 +40,7 @@ function getTheme(){
             resolve(validateTheme());
         }).catch((err) => {
             console.log('Invalid api credentials');
+            reject();
         });
     });
 }
@@ -56,6 +61,7 @@ function validateTheme(){
 
     if(config.themeId){
         if(themeList.find((theme, index) => theme.id == config.themeId)){
+            themeId = config.themeId;
             return config.themeId;
         }
         else {
@@ -73,17 +79,55 @@ function validateTheme(){
 
     const theme = themeList.find((theme, index) => index == result);
 
+    themeId = theme.id;
     updateConfig(theme.id);
 
     return theme.id;
 }
 
 /* ==================================================
-    # Download Theme
-      * downloads theme files
+    # Fetch Assets
+      * fetches list of assets
 ================================================== */
-function downloadTheme(theme){
-    console.log('download', theme);
+function fetchAssets(theme){
+    return new Promise((resolve, reject) => {
+        shopify.asset.list(theme).then((data) => {
+            resolve(data);
+        }).catch((err) => {
+            console.log('Invalid api credentials');
+            reject();
+        });
+    })
+}
+
+function downloadAssets(assets){
+
+    // Get list of all required folders
+    const folders = assets.map((asset, index) => {
+        return asset.key.split('/')[0]
+    }).filter((folder, index, self) => {
+        return self.indexOf(folder) === index;
+    });
+
+    // Create all required folders
+    folders.forEach((folder) => {
+        if(!fs.existsSync(folder)){
+            fs.mkdirSync(folder);
+        }
+    })
+
+    assets.forEach((asset) => {
+        const query = {
+            asset: { key: asset.key },
+            theme_id: themeId
+        };
+        shopify.asset.get(themeId, query)
+            .then(data => {
+                fs.writeFile(data.key, data.value, 'utf8', function(err) {
+                    console.log('downloaded ', data.key);
+                });
+            })
+    });
 }
 
 /* ==================================================
