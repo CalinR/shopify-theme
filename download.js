@@ -4,12 +4,11 @@ const configPath = 'config.json';
 const config = fs.existsSync(configPath) ? JSON.parse(fs.readFileSync(configPath, 'utf8')) : null;
 const Shopify = require('shopify-api-node');
 const prompt = require('prompt-sync')();
+const ProgressBar = require('progress');
 const configuration = require('./configuration.js');
 let themeList = [];
 let themeId;
 let shopify;
-let themeSize = 0;
-
 
 /* ==================================================
     # Download
@@ -100,7 +99,21 @@ function fetchAssets(theme){
     })
 }
 
+/* ==================================================
+    # Download Assets
+      * download all theme assets
+================================================== */
 function downloadAssets(assets){
+    const fileSize = assets.reduce((total, asset) => {
+        return total + asset.size;
+    }, 0);
+
+    const bar = new ProgressBar('[downloading]: :current / :total [:bar] :percent', {
+        complete: '=',
+        incomplete: '-',
+        width: 75,
+        total: assets.length
+    })
 
     // Get list of all required folders
     const folders = assets.map((asset, index) => {
@@ -116,6 +129,7 @@ function downloadAssets(assets){
         }
     })
 
+    // Fetch each asset's contents and write to disk
     assets.forEach((asset) => {
         const query = {
             asset: { key: asset.key },
@@ -124,8 +138,15 @@ function downloadAssets(assets){
         shopify.asset.get(themeId, query)
             .then(data => {
                 fs.writeFile(data.key, data.value, 'utf8', function(err) {
-                    console.log('downloaded ', data.key);
+                    // downloaded += asset.size;
                 });
+                if (bar.complete) {
+                    console.log('\ncomplete\n');
+                }
+                else {
+
+                    bar.tick();
+                }
             })
     });
 }

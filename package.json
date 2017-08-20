@@ -1,6 +1,6 @@
 {
   "name": "shopify-theme",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "",
   "bin": {
     "shopify-theme": "index.js"
@@ -13,6 +13,7 @@
   "dependencies": {
     "commander": "^2.11.0",
     "pad": "^1.1.0",
+    "progress": "^2.0.0",
     "prompt-sync": "^4.1.5",
     "shopify-api-node": "^2.8.0"
   }
