@@ -21,6 +21,7 @@ module.exports = (config) => {
         }
         else {
             console.log('config.json created');
+            process.exit();
         }
     });
 }

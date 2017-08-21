@@ -27,7 +27,10 @@ program.command('upload')
 
 program.command('version')
     .description('Print the version number of Shopify Theme')
-    .action(() => console.log(packageJson.version));
+    .action(() => {
+        console.log(packageJson.version)
+        process.exit();
+    });
 
 program.command('watch')
     .description('Watch directory for changes and update remote theme')
