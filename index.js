@@ -6,6 +6,7 @@ const configuration = require('./configuration.js');
 const download = require('./download.js');
 const watch = require('./watch.js');
 const upload = require('./upload.js');
+const open = require('./open.js');
 
 program.helpInformation = helptext; // Overrides help text
 
@@ -20,6 +21,10 @@ program.command('configure')
 program.command('download')
     .description('Downloads theme files')
     .action(() => download());
+
+program.command('open')
+    .description('Open a preview for your store')
+    .action(() => open());
 
 program.command('upload')
     .description('upload theme file(s) to Shopify')
@@ -40,4 +45,5 @@ program.parse(process.argv);
 
 if (!process.argv.slice(2).length) {
     program.outputHelp();
+    process.exit();
 }
