@@ -5,6 +5,7 @@ const helptext = require('./helptext.js');
 const configuration = require('./configuration.js');
 const download = require('./download.js');
 const watch = require('./watch.js');
+const upload = require('./upload.js');
 
 program.helpInformation = helptext; // Overrides help text
 
@@ -19,6 +20,10 @@ program.command('configure')
 program.command('download')
     .description('Downloads theme files')
     .action(() => download());
+
+program.command('upload')
+    .description('upload theme file(s) to Shopify')
+    .action(() => upload())
 
 program.command('version')
     .description('Print the version number of Shopify Theme')

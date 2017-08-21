@@ -11,6 +11,7 @@
   "author": "Calin Reimer",
   "license": "ISC",
   "dependencies": {
+    "chokidar": "^1.7.0",
     "commander": "^2.11.0",
     "pad": "^1.1.0",
     "progress": "^2.0.0",
