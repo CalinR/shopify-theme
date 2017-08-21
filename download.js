@@ -100,10 +100,32 @@ function fetchAssets(theme){
 }
 
 /* ==================================================
+    # Removes duplicates
+      * removes duplicate version of .liquid files
+        ex: .js and .js.liquid
+      * in above example, .js will be removed
+================================================== */
+function removeDuplicates(assets){
+    return assets.filter((asset, index, self) => {
+        if(asset.key.indexOf('.liquid')==-1){
+            return self.findIndex((t, i) => {
+                const key = t.key.split('.liquid')[0];
+                return key == asset.key && i != index;
+            }) == -1;
+        }
+        else {
+            return true;
+        }
+    })
+}
+
+/* ==================================================
     # Download Assets
       * download all theme assets
 ================================================== */
 function downloadAssets(assets){
+    assets = removeDuplicates(assets);
+
     const fileSize = assets.reduce((total, asset) => {
         return total + asset.size;
     }, 0);
@@ -140,14 +162,21 @@ function downloadAssets(assets){
                 fs.writeFile(data.key, data.value, 'utf8', function(err) {
                     // downloaded += asset.size;
                 });
+
+                bar.tick();
+
                 if (bar.complete) {
                     console.log('\ncomplete\n');
+                    process.exit();
                 }
-                else {
-
-                    bar.tick();
+            }).catch((error) => {
+                bar.tick();
+                
+                if (bar.complete) {
+                    console.log('\ncomplete\n');
+                    process.exit();
                 }
-            })
+            });  
     });
 }
 

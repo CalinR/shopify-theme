@@ -34,21 +34,19 @@ module.exports = function(){
                 value: data
             }
 
-            // console.log(request);
-
             shopify.asset.update(config.themeId, request).then(() => {
+                bar.tick();
+                
                 if (bar.complete) {
                     console.log('\ncomplete\n');
-                }
-                else {
-                    bar.tick();
+                    process.exit();
                 }
             }).catch((error) => {
+                bar.tick();
+                
                 if (bar.complete) {
-                    return console.log('\ncomplete\n');
-                }
-                else {
-                    bar.tick();
+                    console.log('\ncomplete\n');
+                    process.exit();
                 }
                 // console.log(error, path);
             });      
