@@ -3,6 +3,7 @@ const chokidar = require('chokidar');
 const configPath = 'config.json';
 const config = fs.existsSync(configPath) ? JSON.parse(fs.readFileSync(configPath, 'utf8')) : null;
 const Shopify = require('shopify-api-node');
+const isBinaryFile = require("isbinaryfile");
 let shopify;
 const watcher = chokidar.watch('.', {
     persistent: true,
@@ -27,17 +28,22 @@ module.exports = function(){
 }
 
 function addFile(path){
-    if(hasSubpath(path)){
-        fs.readFile(path, 'utf8', (err, data) => {
+    if(hasSubpath(path) && !isHiddenFile(path)){
+        const encoding = isBinaryFile.sync(path) ? 'base64' : 'utf8';
+
+        fs.readFile(path, encoding, (err, data) => {
             if(err) {
                 return console.log(err);
             }
-
-            const request = {
-                key: path,
-                value: data
+            let request = {
+                key: path
             }
-
+            if(encoding == 'base64'){
+                request.attachment = data.toString('base64')
+            }
+            else {
+                request.value = data;
+            }
             shopify.asset.create(config.themeId, request).then(() => {
                 console.log(`Successfully performed Create operation for ${ path }`);
             }).catch((error) => {
@@ -48,17 +54,22 @@ function addFile(path){
 }
 
 function updateFile(path){
-    if(hasSubpath(path)){
-        fs.readFile(path, 'utf8', (err, data) => {
+    if(hasSubpath(path) && !isHiddenFile(path)){
+        const encoding = isBinaryFile.sync(path) ? 'base64' : 'utf8';
+
+        fs.readFile(path, encoding, (err, data) => {
             if(err) {
                 return console.log(err);
             }
-
-            const request = {
-                key: path,
-                value: data
+            let request = {
+                key: path
             }
-
+            if(encoding == 'base64'){
+                request.attachment = data.toString('base64')
+            }
+            else {
+                request.value = data;
+            }
             shopify.asset.update(config.themeId, request).then(() => {
                 console.log(`Successfully performed Update operation for ${ path }`);
             }).catch((error) => {
@@ -86,4 +97,11 @@ function removeFile(path){
 
 function hasSubpath(path){
     return path.split('/').length > 1;
+}
+
+function isHiddenFile(path){
+    const parts = path.split('/');
+    const filename = parts[parts.length-1];
+    const firstChar = filename.split('')[0];
+    return firstChar == '.';
 }

@@ -4,6 +4,7 @@ const configPath = 'config.json';
 const config = fs.existsSync(configPath) ? JSON.parse(fs.readFileSync(configPath, 'utf8')) : null;
 const Shopify = require('shopify-api-node');
 const ProgressBar = require('progress');
+const isBinaryFile = require("isbinaryfile");
 
 module.exports = function(){
     if(!config) return console.error('no config file found');
@@ -28,10 +29,18 @@ module.exports = function(){
             if(err) {
                 return console.log(err);
             }
-
-            const request = {
-                key: path,
-                value: data
+            if(data.length==0){
+                bar.tick();
+                return true;
+            }
+            let request = {
+                key: path
+            }
+            if(isBinaryFile.sync(path)){
+                request.attachment = data.toString('base64')
+            }
+            else {
+                request.value = data;
             }
 
             shopify.asset.update(config.themeId, request).then(() => {

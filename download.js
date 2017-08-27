@@ -100,7 +100,7 @@ function fetchAssets(theme){
 }
 
 /* ==================================================
-    # Removes duplicates
+    # Remove duplicates
       * removes duplicate version of .liquid files
         ex: .js and .js.liquid
       * in above example, .js will be removed
@@ -158,8 +158,12 @@ function downloadAssets(assets){
             theme_id: themeId
         };
         shopify.asset.get(themeId, query)
-            .then(data => {
-                fs.writeFile(data.key, data.value, 'utf8', function(err) {
+            .then(asset => {
+                // console.log(asset);
+                const data = asset.value ? asset.value : asset.attachment;
+                const encoding = asset.value ? 'utf8' : 'base64';
+
+                fs.writeFile(asset.key, data, encoding, function(err) {
                     // downloaded += asset.size;
                 });
 

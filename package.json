@@ -1,6 +1,6 @@
 {
   "name": "shopify-theme",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "",
   "bin": {
     "shopify-theme": "index.js"
@@ -13,6 +13,7 @@
   "dependencies": {
     "chokidar": "^1.7.0",
     "commander": "^2.11.0",
+    "isbinaryfile": "^3.0.2",
     "opn": "^5.1.0",
     "pad": "^1.1.0",
     "progress": "^2.0.0",
