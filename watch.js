@@ -4,6 +4,7 @@ const configPath = 'config.json';
 const config = fs.existsSync(configPath) ? JSON.parse(fs.readFileSync(configPath, 'utf8')) : null;
 const Shopify = require('shopify-api-node');
 const isBinaryFile = require("isbinaryfile");
+const notification = require('./notification.js');
 let shopify;
 const watcher = chokidar.watch('.', {
     persistent: true,
@@ -47,7 +48,8 @@ function addFile(path){
             shopify.asset.create(config.themeId, request).then(() => {
                 console.log(`Successfully performed Create operation for ${ path }`);
             }).catch((error) => {
-                console.log(error);
+                const jsonResponse = error.response.body.errors;
+                notification.error(`Error uploading ${path}`, jsonResponse.asset[0])
             });
         });
     }
@@ -73,8 +75,9 @@ function updateFile(path){
             shopify.asset.update(config.themeId, request).then(() => {
                 console.log(`Successfully performed Update operation for ${ path }`);
             }).catch((error) => {
-                console.log(error);
-            });
+                const jsonResponse = error.response.body.errors;
+                notification.error(`Error uploading ${path}`, jsonResponse.asset[0])
+            })
         });
     }
 }

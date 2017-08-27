@@ -6,8 +6,10 @@ const Shopify = require('shopify-api-node');
 const prompt = require('prompt-sync')();
 const ProgressBar = require('progress');
 const configuration = require('./configuration.js');
+const notification = require('./notification.js');
 let themeList = [];
 let themeId;
+let themeName;
 let shopify;
 
 /* ==================================================
@@ -59,8 +61,10 @@ function validateTheme(){
     });
 
     if(config.themeId){
-        if(themeList.find((theme, index) => theme.id == config.themeId)){
+        const theme = themeList.find((theme, index) => theme.id == config.themeId);
+        if(theme){
             themeId = config.themeId;
+            themeName = theme.name;
             return config.themeId;
         }
         else {
@@ -79,6 +83,7 @@ function validateTheme(){
     const theme = themeList.find((theme, index) => index == result);
 
     themeId = theme.id;
+    themeName = theme.name;
     updateConfig(theme.id);
 
     return theme.id;
@@ -170,14 +175,14 @@ function downloadAssets(assets){
                 bar.tick();
 
                 if (bar.complete) {
-                    console.log('\ncomplete\n');
+                    notification.success('Finished', `Downloaded the ${themeName} theme from ${ config.shop }`)
                     process.exit();
                 }
             }).catch((error) => {
                 bar.tick();
                 
                 if (bar.complete) {
-                    console.log('\ncomplete\n');
+                    notification.success('Finished', `Downloaded the ${themeName} theme from ${ config.shop }`)
                     process.exit();
                 }
             });  
