@@ -2,13 +2,48 @@
 <html>
     <head>
         <title>Shopify-Theme</title>
+        <link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,700" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css?family=Roboto:400,500,700" rel="stylesheet">
+        <link rel="stylesheet" href="{{ site.baseurl }}/styles.css">
+        <script src="https://use.fontawesome.com/dacd17c12e.js"></script>
     </head>
     <body>
-        <main role="main" id="main">
-            {% include header.html %}
-            <div>
-                {{ content }}
-            </div>
+        {% include sidebar.html %}
+        <main class="main">
+            <h1>H1. Heading</h1>
+            <h2>H2. Heading</h2>
+            <h3>H3. Heading</h3>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur vehicula aliquet tortor et dignissim. Integer lobortis vitae libero ut condimentum. Nunc malesuada nunc enim, ac rutrum mauris pharetra rhoncus. Sed ac arcu eu orci elementum pellentesque a in quam. Fusce venenatis tincidunt pharetra. Vestibulum elementum tempor purus, volutpat ultricies eros ullamcorper vel. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Cras tempor ultrices diam. Sed non laoreet sapien, a tempus augue. Cras semper ipsum et eros mollis, eget fermentum velit egestas. Proin maximus, augue non accumsan ullamcorper, quam massa suscipit tortor, blandit hendrerit neque est posuere purus. Proin quam tellus, imperdiet id nibh ut, posuere fringilla neque. Sed nec quam odio.</p>
+            <p>Nulla facilisi. Quisque faucibus faucibus sodales. In pulvinar magna quam, sit amet tincidunt sem interdum eu. Maecenas semper sem vitae porttitor elementum. In hac habitasse platea dictumst. Maecenas dictum aliquet placerat. Suspendisse eget sagittis nisi. Quisque congue purus ut erat euismod placerat eget a ipsum. Duis nec fringilla tortor, at molestie est.</p>
+            <ul>
+                <li>Phasellus at ligula venenatis, finibus ante sed, ultricies leo.
+                    <ul>
+                        <li>Nested list item 1</li>
+                        <li>Nested list item 2</li>
+                        <li>Nested list item 3</li>
+                    </ul>
+                </li>
+                <li>Integer laoreet diam non ex rhoncus auctor.</li>
+                <li>Nullam convallis purus molestie mi volutpat suscipit.</li>
+                <li>Nulla commodo orci ac fringilla fermentum.</li>
+                <li>Proin ut libero ut erat porta dapibus.</li>
+                <li>Sed vel eros sodales, aliquam sem non, rhoncus nisl.</li>
+            </ul>
+            <ol>
+                <li>Phasellus at ligula venenatis, finibus ante sed, ultricies leo.</li>
+                <li>Integer laoreet diam non ex rhoncus auctor.</li>
+                <li>Nullam convallis purus molestie mi volutpat suscipit.
+                    <ol>
+                        <li>Nested list item 1</li>
+                        <li>Nested list item 2</li>
+                        <li>Nested list item 3</li>
+                    </ol>
+                </li>
+                <li>Nulla commodo orci ac fringilla fermentum.</li>
+                <li>Proin ut libero ut erat porta dapibus.</li>
+                <li>Sed vel eros sodales, aliquam sem non, rhoncus nisl.</li>
+            </ol>
+            {{ content }}
         </main>
     </body>
 </html>

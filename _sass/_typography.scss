@@ -1,0 +1,69 @@
+body {
+    font-family: 'Roboto', sans-serif;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+    font-size: 15px;
+    font-weight: 400;
+    line-height: 1.75;
+    color: #333;
+}
+
+// Headings
+h1, h2, h3 {
+    line-height: 1.5;
+    font-weight: 400;
+    color: #000;
+}
+h1 {
+    font-size: 40px;
+    margin-bottom: 10px;
+}
+h2 {
+    font-size: 32px;
+    margin-bottom: 10px;
+}
+h3 {
+    font-size: 24px;
+    margin-bottom: 5px;
+}
+
+// Body text
+p, ul, ol {
+    margin-bottom: 20px;
+}
+
+
+// List styles
+ul {
+    list-style: disc;
+    list-style-position: outside;
+    padding-left: 20px;
+    ul {
+        list-style: square;
+    }
+    ol {
+        list-style: lower-alpha;
+    }
+}
+ol {
+    list-style: decimal;
+    list-style-position: outside;
+    padding-left: 20px;
+    ol {
+        list-style: lower-alpha;
+    }
+    ul {
+        list-style: square;
+    }
+}
+ul ul, ol ol, ul ol, ol ul {
+    padding-left: 30px;
+    margin: 0;
+    list-style-position: inherit;
+}
+.logo {
+    font-size: 24px;
+    text-align: center;
+    font-weight: 600;
+    text-transform: uppercase;
+}
