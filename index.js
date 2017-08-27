@@ -12,6 +12,7 @@ program.helpInformation = helptext; // Overrides help text
 
 program.version(packageJson.version)
     .usage('[command]')
+    .option('-e, --env [name]', 'Environment to run the command (default "developement")')
     .description('Shopify Theme is a tool for manipulating Shopify themes.');
 
 program.command('configure')
@@ -20,15 +21,15 @@ program.command('configure')
 
 program.command('download')
     .description('Downloads theme files')
-    .action(() => download());
+    .action(() => download(program.env));
 
 program.command('open')
     .description('Open a preview for your store')
-    .action(() => open());
+    .action(() => open(program.env));
 
 program.command('upload')
     .description('upload theme file(s) to Shopify')
-    .action(() => upload())
+    .action(() => upload(program.env))
 
 program.command('version')
     .description('Print the version number of Shopify Theme')
@@ -39,7 +40,7 @@ program.command('version')
 
 program.command('watch')
     .description('Watch directory for changes and update remote theme')
-    .action(() => watch());
+    .action(() => watch(program.env));
 
 program.parse(process.argv);
 

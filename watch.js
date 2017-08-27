@@ -1,7 +1,7 @@
 const fs = require('fs');
 const chokidar = require('chokidar');
-const configPath = 'config.json';
-const config = fs.existsSync(configPath) ? JSON.parse(fs.readFileSync(configPath, 'utf8')) : null;
+const getConfig = require('./getConfig.js');
+let config = null;
 const Shopify = require('shopify-api-node');
 const isBinaryFile = require("isbinaryfile");
 const notification = require('./notification.js');
@@ -11,8 +11,11 @@ const watcher = chokidar.watch('.', {
     ignoreInitial: true
 });
 
-module.exports = function(){
-    if(!config) return console.error('no config file found');
+module.exports = function(env){
+    config = getConfig(env);
+    if(!config){
+        process.exit();
+    }
     shopify = new Shopify({
         shopName: config.shop.split('.myshopify.com')[0],
         apiKey: config.apiKey,
@@ -20,7 +23,7 @@ module.exports = function(){
         autoLimit: true
     });
 
-    console.log('Watching for file changes');
+    console.log(`[${ config.environment }] Watching for file changes`);
 
     watcher
         .on('add', addFile)

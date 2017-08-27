@@ -1,7 +1,7 @@
 const pad = require('pad');
 const fs = require('fs');
-const configPath = 'config.json';
-const config = fs.existsSync(configPath) ? JSON.parse(fs.readFileSync(configPath, 'utf8')) : null;
+const getConfig = require('./getConfig.js');
+let config = null;
 const Shopify = require('shopify-api-node');
 const prompt = require('prompt-sync')();
 const ProgressBar = require('progress');
@@ -16,7 +16,13 @@ let shopify;
     # Download
       * Main function
 ================================================== */
-function download(){
+function download(env){
+    config = getConfig(env);
+
+    if(!config){
+        process.exit();
+    }
+
     if(!config) return console.error('no config file found');
     shopify = new Shopify({
         shopName: config.shop.split('.myshopify.com')[0],
@@ -135,7 +141,7 @@ function downloadAssets(assets){
         return total + asset.size;
     }, 0);
 
-    const bar = new ProgressBar('[downloading]: :current / :total [:bar] :percent', {
+    const bar = new ProgressBar(`[${ config.environment }]: :current / :total [:bar] :percent`, {
         complete: '=',
         incomplete: '-',
         width: 75,

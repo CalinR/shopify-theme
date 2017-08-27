@@ -1,13 +1,17 @@
 const fs = require('fs');
 const path = require('path');
-const configPath = 'config.json';
-const config = fs.existsSync(configPath) ? JSON.parse(fs.readFileSync(configPath, 'utf8')) : null;
+const getConfig = require('./getConfig.js');
+let config = null;
 const Shopify = require('shopify-api-node');
 const ProgressBar = require('progress');
 const isBinaryFile = require("isbinaryfile");
 
-module.exports = function(){
-    if(!config) return console.error('no config file found');
+module.exports = function(env){
+    config = getConfig(env);
+    if(!config){
+        process.exit();
+    }
+
     shopify = new Shopify({
         shopName: config.shop.split('.myshopify.com')[0],
         apiKey: config.apiKey,
@@ -17,7 +21,7 @@ module.exports = function(){
 
     const files = getFiles('./');
 
-    const bar = new ProgressBar('[uploading]: :current / :total [:bar] :percent', {
+    const bar = new ProgressBar(`[${ config.environment }]: :current / :total [:bar] :percent`, {
         complete: '=',
         incomplete: '-',
         width: 75,
