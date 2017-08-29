@@ -1,0 +1,9 @@
+{
+    "development": {
+        "shop": "shopify-cli.myshopify.com",
+		"themeId": null,
+		"apiKey": "0e17f2b88649803c60afc9d7b838d2f1",
+		"password": "b93ee4eb4e63e893f0999e1989d90e2b",
+        "checkFrequency": 60
+    }
+}

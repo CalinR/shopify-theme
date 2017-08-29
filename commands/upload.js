@@ -1,6 +1,6 @@
 const fs = require('fs');
 const path = require('path');
-const getConfig = require('./getConfig.js');
+const getConfig = require('../helpers/getConfig.js');
 let config = null;
 const Shopify = require('shopify-api-node');
 const ProgressBar = require('progress');

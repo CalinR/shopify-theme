@@ -2,7 +2,7 @@ const fs = require('fs');
 const configPath = 'config.json';
 const configFile = fs.existsSync(configPath) ? JSON.parse(fs.readFileSync(configPath, 'utf8')) : null;
 
-const getConfig = (env = 'developement') => {
+const getConfig = (env = 'development') => {
     try {
         if(configFile[env]){
             return Object.assign(configFile[env], {environment: env} );

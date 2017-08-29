@@ -1,12 +1,13 @@
 const pad = require('pad');
 const fs = require('fs');
-const getConfig = require('./getConfig.js');
+const getConfig = require('../helpers/getConfig.js');
 let config = null;
 const Shopify = require('shopify-api-node');
 const prompt = require('prompt-sync')();
 const ProgressBar = require('progress');
 const configuration = require('./configuration.js');
-const notification = require('./notification.js');
+const notification = require('../helpers/notification.js');
+const updateLockfile = require('../helpers/updateLockfile.js');
 let themeList = [];
 let themeId;
 let themeName;
@@ -24,16 +25,24 @@ function download(env){
     }
 
     if(!config) return console.error('no config file found');
-    shopify = new Shopify({
-        shopName: config.shop.split('.myshopify.com')[0],
-        apiKey: config.apiKey,
-        password: config.password,
-        autoLimit: true
-    });
 
-    getTheme()
-        .then(fetchAssets)
-        .then(downloadAssets)
+    try {
+        shopify = new Shopify({
+            shopName: config.shop.split('.myshopify.com')[0],
+            apiKey: config.apiKey,
+            password: config.password,
+            autoLimit: true
+        });
+
+        getTheme()
+            .then(fetchAssets)
+            .then(downloadAssets)
+    
+    }
+    catch(error){
+        console.log('invalid config.json');
+        process.exit();
+    }
 }
 
 /* ==================================================
@@ -63,8 +72,11 @@ function validateTheme(){
     const characters = String(themeList.length).length;
 
     const description = themeList.map((theme, index) => {
-        return `  ${ pad(`${index}.`, characters+2) }${ theme.name }`;
+        return `  ${ pad(`${index}.`, characters+2) }${ theme.name }${ theme.role == 'main' ? ' (published)' : '' }`;
     });
+
+    // console.log(config.themeId);
+    // return;
 
     if(config.themeId){
         const theme = themeList.find((theme, index) => theme.id == config.themeId);
@@ -102,6 +114,7 @@ function validateTheme(){
 function fetchAssets(theme){
     return new Promise((resolve, reject) => {
         shopify.asset.list(theme).then((data) => {
+            updateLockfile(data, config.environment);
             resolve(data);
         }).catch((err) => {
             console.log('Invalid api credentials');

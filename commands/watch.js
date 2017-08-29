@@ -1,10 +1,10 @@
 const fs = require('fs');
 const chokidar = require('chokidar');
-const getConfig = require('./getConfig.js');
+const getConfig = require('../helpers/getConfig.js');
 let config = null;
 const Shopify = require('shopify-api-node');
 const isBinaryFile = require("isbinaryfile");
-const notification = require('./notification.js');
+const notification = require('../helpers/notification.js');
 let shopify;
 const watcher = chokidar.watch('.', {
     persistent: true,
@@ -29,6 +29,10 @@ module.exports = function(env){
         .on('add', addFile)
         .on('change', updateFile)
         .on('unlink', removeFile)
+}
+
+function convertToMilliseconds(seconds){
+    return seconds * 1000;
 }
 
 function addFile(path){

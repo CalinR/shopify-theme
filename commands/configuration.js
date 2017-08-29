@@ -1,12 +1,5 @@
 const fs = require('fs');
-
-const defaultConfig = {
-    "shop": "shop.myshopify.com",
-    "themeId": "123456789",
-    "apiKey": "apikey",
-    "password": "password",
-    "checkFrequency": 60
-};
+const defaultConfig = require('../defaultConfig.json');
 
 module.exports = (config) => {
     config = config || defaultConfig;

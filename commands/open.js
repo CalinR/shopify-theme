@@ -1,6 +1,6 @@
 const fs = require('fs');
 const opn = require('opn');
-const getConfig = require('./getConfig.js');
+const getConfig = require('../helpers/getConfig.js');
 let config = null;
 
 module.exports = function(env){

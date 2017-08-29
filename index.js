@@ -1,18 +1,18 @@
 #! /usr/bin/env node
 const program = require('commander');
 const packageJson = require('./package.json');
-const helptext = require('./helptext.js');
-const configuration = require('./configuration.js');
-const download = require('./download.js');
-const watch = require('./watch.js');
-const upload = require('./upload.js');
-const open = require('./open.js');
+const helptext = require('./helpers/helptext.js');
+const configuration = require('./commands/configuration.js');
+const download = require('./commands/download.js');
+const watch = require('./commands/watch.js');
+const upload = require('./commands/upload.js');
+const open = require('./commands/open.js');
 
 program.helpInformation = helptext; // Overrides help text
 
 program.version(packageJson.version)
     .usage('[command]')
-    .option('-e, --env [name]', 'Environment to run the command (default "developement")')
+    .option('-e, --env [name]', 'Environment to run the command (default "development")')
     .description('Shopify Theme is a tool for manipulating Shopify themes.');
 
 program.command('configure')
